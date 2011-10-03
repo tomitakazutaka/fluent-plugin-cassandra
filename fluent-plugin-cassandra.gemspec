@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "fluent-plugin-cassandra.gemspec",
     "lib/fluent/plugin/out_cassandra.rb"
   ]
   s.homepage = "http://github.com/tomitakazutaka/fluent-plugin-cassandra"
