@@ -17,10 +17,13 @@ Jeweler::Tasks.new do |gem|
   gem.name = "fluent-plugin-cassandra"
   gem.homepage = "http://github.com/tomitakazutaka/fluent-plugin-cassandra"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = "Cassandra output plugin for Fluent event collector"
+  gem.description = "Cassandra output plugin for Fluent event collector"
   gem.email = "tomitakazutaka@gmail.com"
   gem.authors = ["Kazutaka Tomita"]
+  gem.add_dependency "fluent", "~> 0.9.14"
+  gem.add_dependency "cassandra", "~> 0.12.1"
+
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
@@ -49,5 +52,5 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "fluent-plugin-cassandra #{version}"
   rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.rdoc_files.include('lib/fluent/plugin/*.rb')
 end

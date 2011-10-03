@@ -1,6 +1,31 @@
 = fluent-plugin-cassandra
 
-Description goes here.
+= MongoDB output plugin for Fluent
+
+== Configuratin
+
+    <match **>                              # cassandra's key is tags + event.time.
+      type cassandra                        # 
+      keyspace Keyspace1                    # keyspace
+      columnfamily Standard1                # Columnfamily
+
+      # following attibutes are optional
+      host localhost                        # cassandra's hostname. default localhost
+      port 9160                             # cassandra's thrft port. default 9160
+
+    </match>
+
+== TODO
+
+=== More configuration
+
+- Create Keyspace
+- Create Columnfamily
+- etc
+
+=== Infer collection name
+
+Fluent tag and event.time is key in Cassandra.
 
 == Contributing to fluent-plugin-cassandra
  
