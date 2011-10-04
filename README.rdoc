@@ -1,6 +1,6 @@
 = fluent-plugin-cassandra
 
-= MongoDB output plugin for Fluent
+= Cassandra output plugin for Fluent
 
 == Configuratin
 
