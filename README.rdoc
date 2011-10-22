@@ -4,10 +4,11 @@
 
 == Configuratin
 
-    <match **>                              # cassandra's key is tags + event.time.
+    <match cassandra.**>                              # cassandra's key is tags + event.time.
       type cassandra                        # 
-      keyspace Keyspace1                    # keyspace
-      columnfamily Standard1                # Columnfamily
+      localtime                             # set localtime for key
+      keyspace FluentdLoggers               # keyspace
+      columnfamily EventLogger              # Columnfamily
 
       # following attibutes are optional
       host localhost                        # cassandra's hostname. default localhost
@@ -20,8 +21,35 @@
 === More configuration
 
 - Create Keyspace
+
+create keyspace FluentdLoggers
+    with strategy_options=[{replication_factor:1}]
+    and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';
+
+
 - Create Columnfamily
+#example CF
+
+use FluentdLoggers;
+
+create column family EventLogger
+    with comparator = UTF8Type
+    and column_metadata = [{
+        column_name : tag,
+        validation_class: UTF8Type,
+        index_name : tag_idx,
+        index_type: KEYS},{
+        column_name : time,
+        validation_class : BytesType,
+        index_name : time_idx,
+        index_type: KEYS}
+    ];
+
 - etc
+
+put plugin
+cp -ip ${GEM PATHS}/gem/fluent-plugin-cassandra-0.0.2/lib/fluent/plugin/out_cassandra.rb /etc/fluent/plugin/.
+
 
 === Infer collection name
 

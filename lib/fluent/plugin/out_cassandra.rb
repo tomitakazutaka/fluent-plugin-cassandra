@@ -3,6 +3,12 @@ module Fluent
 
 class CassandraOutput < BufferedOutput
   Fluent::Plugin.register_output('cassandra', self)
+  include SetTimeKeyMixin
+  include SetTagKeyMixin
+  config_set_default :include_time_key, true
+  config_set_default :include_tag_key, true
+  config_set_default :time_format, "%Y%m%d%H%M%S"
+
 
   def initialize
     super
@@ -13,8 +19,8 @@ class CassandraOutput < BufferedOutput
   def configure(conf)
     super
 
-    raise ConfigError, "'Keyspace' parameter is required on file output"   unless @keyspace = conf['keyspace']
-    raise ConfigError, "'ColumnFamily' parameter is required on file output"   unless @columnfamily = conf['columnfamily']
+    raise ConfigError, "'Keyspace' parameter is required on cassandra output"   unless @keyspace = conf['keyspace']
+    raise ConfigError, "'ColumnFamily' parameter is required on cassandra output"   unless @columnfamily = conf['columnfamily']
 
     @host = conf.has_key?('host') ? conf['host'] : 'localhost'
     @port = conf.has_key?('port') ? conf['port'] : 9160
@@ -29,20 +35,17 @@ class CassandraOutput < BufferedOutput
     super
   end
 
-  def format(tag, event)
-    [tag,event.time,event.record].to_msgpack
+  def format(tag, time,record)
+    record.to_msgpack
   end
 
   def write(chunk)
-    chunk.open { |io|
-      begin
-        MessagePack::Unpacker.new(io).each { |record|
-            c_key = record[0] + "_" + record[1].to_s
-            @connection.insert(@columnfamily,c_key,record[2])
-        }
-      rescue EOFError
-        # EOFError always occured when reached end of chunk.
-      end
+    chunk.msgpack_each  { |record|
+            @connection.insert(
+                    @columnfamily,
+                    record["tag"] + "_" + record["time"].to_s,
+                    record
+                    )
     }
   end
 end
