@@ -22,7 +22,7 @@
 
 - Create Keyspace
 
-create keyspace FluentdLoggers
+ create keyspace FluentdLoggers
     with strategy_options=[{replication_factor:1}]
     and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';
 
@@ -30,9 +30,9 @@ create keyspace FluentdLoggers
 - Create Columnfamily
 #example CF
 
-use FluentdLoggers;
+ use FluentdLoggers;
 
-create column family EventLogger
+ create column family EventLogger
     with comparator = UTF8Type
     and column_metadata = [{
         column_name : tag,
@@ -47,8 +47,8 @@ create column family EventLogger
 
 - etc
 
-put plugin
-cp -ip ${GEM PATHS}/gem/fluent-plugin-cassandra-0.0.2/lib/fluent/plugin/out_cassandra.rb /etc/fluent/plugin/.
+ put plugin
+ cp -ip ${GEM PATHS}/gem/fluent-plugin-cassandra-0.0.2/lib/fluent/plugin/out_cassandra.rb /etc/fluent/plugin/.
 
 
 === Infer collection name
